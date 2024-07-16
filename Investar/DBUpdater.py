@@ -38,6 +38,7 @@ class DBUpdater:
 
     def __del__(self):
         """소멸자: MariaDB 연결 해제"""
+        self.conn.close()
 
     def read_krx_code(self):
         """KRX로부터 상장법인목록 파일을 읽어와서 데이터프레임으로 반환"""
