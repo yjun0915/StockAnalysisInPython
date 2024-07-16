@@ -1,8 +1,13 @@
 # 05_StockPriceAPI\Investar\DBUpdater.py
 
+import pymysql
+import pandas
+
 class DBUpdater:
     def __init__(self):
         """생성자: MariaDB 연결 및 종목코드 딕셔너리 생성"""
+        self.conn = pymysql.connect(host='localhost', user='root',
+                                    password='sk1127..', db='Investar', charset='utf-8')
 
     def __del__(self):
         """소멸자: MariaDB 연결 해제"""
