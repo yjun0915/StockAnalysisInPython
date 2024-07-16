@@ -9,6 +9,33 @@ class DBUpdater:
         self.conn = pymysql.connect(host='localhost', user='root',
                                     password='sk1127..', db='Investar', charset='utf-8')
 
+        with self.conn.cursor() as curs:
+            sql = """
+            CREATE TABLE IF NOT EXISTS company_info (
+	            code VARCHAR(20), 
+                company VARCHAR(40), 
+                last_update DATE, 
+                PRIMARY KEY (code))
+            """
+            curs.execute(sql)
+            sql = """
+            CREATE TABLE IF NOT EXISTS daily_price (
+                code VARCHAR(20), 
+                date DATE, 
+                open BIGINT(20), 
+                high BIGINT(20), 
+                low BIGINT(20), 
+                close BIGINT(20), 
+                diff BIGINT(20), 
+                volume BIGINT(20), 
+                PRIMARY KEY (code, date))
+            """
+            curs.execute(sql)
+        self.conn.commit()
+
+        self.codes = dict()
+        self.update_comp_info()
+
     def __del__(self):
         """소멸자: MariaDB 연결 해제"""
 
