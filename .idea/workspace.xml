@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="f5e1bf65-f450-4d9b-8c1a-5f86130ebd51" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/StockAnalysisInPython.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    <list default="true" id="f5e1bf65-f450-4d9b-8c1a-5f86130ebd51" name="Changes" comment="feature read from url">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Investar/DBUpdater.py" beforeDir="false" afterPath="$PROJECT_DIR$/Investar/DBUpdater.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -23,7 +27,9 @@
   "associatedIndex": 5
 }]]></component>
   <component name="ProjectId" id="2jEeaSE65YFiwpAQw6peVVjYBgC" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -34,7 +40,8 @@
     "Python.main.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main"
+    "git-widget-placeholder": "main",
+    "settings.editor.selected.configurable": "preferences.editor"
   }
 }]]></component>
   <component name="RunManager">
@@ -77,6 +84,55 @@
       <option name="presentableId" value="Default" />
       <updated>1720956727777</updated>
     </task>
+    <task id="LOCAL-00001" summary="[feat]: init files">
+      <option name="closed" value="true" />
+      <created>1720957142492</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1720957142492</updated>
+    </task>
+    <task id="LOCAL-00002" summary="document stub code">
+      <option name="closed" value="true" />
+      <created>1721136319761</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1721136319761</updated>
+    </task>
+    <task id="LOCAL-00003" summary="feature DB connection">
+      <option name="closed" value="true" />
+      <created>1721136788332</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1721136788332</updated>
+    </task>
+    <task id="LOCAL-00004" summary="feature construct table and commit DB">
+      <option name="closed" value="true" />
+      <created>1721137180883</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1721137180883</updated>
+    </task>
+    <task id="LOCAL-00005" summary="feature close connection">
+      <option name="closed" value="true" />
+      <created>1721137208499</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1721137208499</updated>
+    </task>
+    <task id="LOCAL-00006" summary="feature read from url">
+      <option name="closed" value="true" />
+      <created>1721137773918</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1721137773918</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -89,5 +145,14 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="[feat]: init files" />
+    <MESSAGE value="document stub code" />
+    <MESSAGE value="feature DB connection" />
+    <MESSAGE value="feature construct table and commit DB" />
+    <MESSAGE value="feature close connection" />
+    <MESSAGE value="feature read from url" />
+    <option name="LAST_COMMIT_MESSAGE" value="feature read from url" />
   </component>
 </project>
