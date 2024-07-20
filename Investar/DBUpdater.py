@@ -2,7 +2,7 @@
 
 import pymysql
 import pandas as pd
-
+from datetime import datetime
 
 class DBUpdater:
     def __init__(self):
@@ -53,6 +53,7 @@ class DBUpdater:
 
     def update_comp_info(self):
         """종목코드를 company_info 테이블에 업데이트한 후 딕셔너리에 저장"""
+
 
     def read_naver(self, code, company, pages_to_fetch):
         """네이버 금융에서 주식 시세를 읽어서 데이터프레임으로 반환"""
