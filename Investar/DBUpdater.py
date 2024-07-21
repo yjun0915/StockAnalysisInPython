@@ -1,14 +1,14 @@
 # 05_StockPriceAPI\Investar\DBUpdater.py
 
 import pymysql
+import requests
 import pandas as pd
 from datetime import datetime
 
 class DBUpdater:
     def __init__(self):
         """생성자: MariaDB 연결 및 종목코드 딕셔너리 생성"""
-        self.conn = pymysql.connect(host='localhost', user='root',
-                                    password='sk1127..', db='Investar', charset='utf-8')
+        self.conn = pymysql.connect(host='localhost', user='root', password='sk1127..', db='Investar', charset='utf8')
 
         with self.conn.cursor() as curs:
             sql = """
@@ -44,7 +44,10 @@ class DBUpdater:
     def read_krx_code(self):
         """KRX로부터 상장법인목록 파일을 읽어와서 데이터프레임으로 반환"""
         url = 'http://kind.krx.co.kr/corpgeneral/corpList.do?method=download&searchType=13'
-        krx = pd.read_html(url, header=0)[0]
+        response = requests.get(url)
+        response.encoding = 'euc-kr'
+        krx = pd.read_html(response.text, header=0)[0]
+        print(krx.head())
         krx = krx[['종목코드', '회사명']]
         krx = krx.rename(columns={'종목코드': 'code', '회사명': 'company'})
         krx.code = krx.code.map('{:06d}'.format)
