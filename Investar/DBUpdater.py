@@ -15,7 +15,7 @@ class DBUpdater:
         self.engine = create_engine('mysql+pymysql://root:sk1127..@localhost:3306/Investar?charset=utf8')
         Session = sessionmaker(bind=self.engine)
         self.session = Session()
-        with self.engine.connect() as conn:
+        with self.engine.begin() as conn:
             sql = """
             CREATE TABLE IF NOT EXISTS company_info (
 	            code VARCHAR(20), 
@@ -37,13 +37,14 @@ class DBUpdater:
                 PRIMARY KEY (code, date))
             """
             conn.execute(text(sql))
-        self.session.commit()
+        self.engine.connect().commit()
         self.codes = dict()
 
     def __del__(self):
         """소멸자: SQLAlchemy 연결 해제"""
-        self.session.close()
-        self.engine.dispose()
+        pass
+        # self.session.close()
+        # self.engine.dispose()
 
     def read_krx_code(self):
         """KRX로부터 상장법인목록 파일을 읽어와서 데이터프레임으로 반환"""
@@ -63,7 +64,7 @@ class DBUpdater:
         for idx in range(len(df)):
             self.codes[df['code'].values[idx]] = df['company'].values[idx]
 
-        with self.engine.connect() as conn:
+        with self.engine.begin() as conn:
             sql = "SELECT max(last_update) FROM company_info"
             rs = conn.execute(text(sql)).fetchone()
             today = datetime.today().strftime('%Y-%m-%d')
@@ -73,15 +74,13 @@ class DBUpdater:
                 for idx in range(len(krx)):
                     code = krx.code.values[idx]
                     company = krx.company.values[idx]
-                    sql = f"""
-                    REPLACE INTO company_info (code, company, last_update) 
-                    VALUES ('{code}', '{company}', '{today}')
-                    """
+                    sql = f"REPLACE INTO company_info (code, company, last_update) VALUES ('{code}', '{company}', "\
+                          f"'{today}')"
                     conn.execute(text(sql))
                     self.codes[code] = company
                     tmnow = datetime.now().strftime('%Y-%m-%d %H:%M')
                     print(f"[{tmnow}] {idx:04d} REPLACE INTO company_info VALUES ({code}, {company}, {today})")
-                self.session.commit()
+                self.engine.connect().commit()
                 print('')
 
     def read_naver(self, code, company, pages_to_fetch):
@@ -137,13 +136,13 @@ class DBUpdater:
 
     def replace_into_db(self, df, num, code, company):
         """네이버 금융에서 읽어온 주식 시세를 DB에 REPLACE"""
-        with self.engine.connect() as conn:
+        with self.engine.begin() as conn:
             for r in df.itertuples():
                 sql = "REPLACE INTO daily_price (code, date, open, high, low, close, diff, volume) VALUES ('{}', "\
                       "'{}', {}, {}, {}, {}, {}, {})".format(code, r.date, r.open, r.high, r.low, r.close,
                                                              r.diff, r.volume)
                 conn.execute(text(sql))
-            self.session.commit()
+            self.engine.connect().commit()
             print('[{}] #{:04d} {} ({}) : {} rows > REPLACE INTO daily_price [OK]'.format(datetime.now().
                                                                                           strftime('%Y-%m-%d %H:%M'),
                                                                                           num + 1, company, code,
@@ -152,7 +151,6 @@ class DBUpdater:
 
     def update_daily_price(self, pages_to_fetch):
         """KRX 상장법인의 주식 시세를 네이버로부터 읽어서 DB에 업로드"""
-        print(self.codes)
         for idx, code in enumerate(self.codes):
             df = self.read_naver(code, self.codes[code], pages_to_fetch)
             if df is None:
