@@ -1,15 +1,20 @@
-from sqlalchemy import create_engine, text
+
 import pandas as pd
 import requests
+import calendar, json
 from datetime import datetime
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
-
+from threading import Timer
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import sessionmaker
 
 class DBUpdater:
     def __init__(self):
         """생성자: SQLAlchemy 연결 및 종목코드 딕셔너리 생성"""
         self.engine = create_engine('mysql+pymysql://root:sk1127..@localhost:3306/Investar?charset=utf8')
+        Session = sessionmaker(bind=self.engine)
+        self.session = Session()
         with self.engine.connect() as conn:
             sql = """
             CREATE TABLE IF NOT EXISTS company_info (
@@ -38,8 +43,8 @@ class DBUpdater:
 
     def __del__(self):
         """소멸자: SQLAlchemy 연결 해제"""
-        # SQLAlchemy는 엔진 객체가 자동으로 연결을 관리합니다. 따로 연결 해제 코드는 필요 없습니다.
-        pass
+        self.session.close()
+        self.engine.dispose()
 
     def read_krx_code(self):
         """KRX로부터 상장법인목록 파일을 읽어와서 데이터프레임으로 반환"""
@@ -137,6 +142,32 @@ class DBUpdater:
 
     def execute_daily(self):
         """실행 즉시 및 매일 오후 다섯시에 daily_price 테이블 업데이트"""
+        self.update_comp_info()
+
+        try:
+            with open('config.json', 'r') as in_file:
+                config = json.load(in_file)
+                pages_to_fetch = config['pages_to_fetch']
+        except FileNotFoundError:
+            with open('config.json', 'w') as out_file:
+                pages_to_fetch = 100
+                config = {'pages_to_fetch': 1}
+                json.dump(config, out_file)
+        self.update_daily_price(pages_to_fetch)
+
+        tmnow = datetime.now()
+        lastday = calendar.monthrange(tmnow.year, tmnow.month)[1]
+        if tmnow.month == 12 and tmnow.day == lastday:
+            tmnext = tmnow.replace(year=tmnow.year + 1, month=1, day=1, hour=17, minute=0, second=0)
+        elif tmnow.day == lastday:
+            tmnext = tmnow.replace(month=tmnow.month + 1, day=1, hour=17, minute=0, second=0)
+        else:
+            tmnext = tmnow.replace(day=tmnow.day + 1, hour=17, minute=0, second=0)
+        tmdiff = tmnext - tmnow
+        secs = tmdiff.seconds
+        t = Timer(secs, self.execute_daily)
+        print("Waiting for next update ({}) ... ".format(tmnext.strftime('%Y-%m-%d %H:%M')))
+        t.start()
 
 if __name__ == '__main__':
     dbu = DBUpdater()
