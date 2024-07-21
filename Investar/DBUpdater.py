@@ -4,7 +4,7 @@ import requests
 import calendar, json
 from datetime import datetime
 from bs4 import BeautifulSoup
-from urllib.request import urlopen
+from io import StringIO
 from threading import Timer
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
@@ -37,9 +37,8 @@ class DBUpdater:
                 PRIMARY KEY (code, date))
             """
             conn.execute(text(sql))
-
+        self.session.commit()
         self.codes = dict()
-        self.update_comp_info()
 
     def __del__(self):
         """소멸자: SQLAlchemy 연결 해제"""
@@ -52,7 +51,6 @@ class DBUpdater:
         response = requests.get(url)
         response.encoding = 'euc-kr'
         krx = pd.read_html(response.text, header=0)[0]
-        print(krx.head())
         krx = krx[['종목코드', '회사명']]
         krx = krx.rename(columns={'종목코드': 'code', '회사명': 'company'})
         krx.code = krx.code.map('{:06d}'.format)
@@ -60,12 +58,12 @@ class DBUpdater:
 
     def update_comp_info(self):
         """종목코드를 company_info 테이블에 업데이트한 후 딕셔너리에 저장"""
-        with self.engine.connect() as conn:
-            sql = "SELECT * FROM company_info"
-            df = pd.read_sql(sql, conn)
-            for idx in range(len(df)):
-                self.codes[df['code'].values[idx]] = df['company'].values[idx]
+        sql = "SELECT * FROM company_info"
+        df = pd.read_sql(sql, self.engine)
+        for idx in range(len(df)):
+            self.codes[df['code'].values[idx]] = df['company'].values[idx]
 
+        with self.engine.connect() as conn:
             sql = "SELECT max(last_update) FROM company_info"
             rs = conn.execute(text(sql)).fetchone()
             today = datetime.today().strftime('%Y-%m-%d')
@@ -83,16 +81,19 @@ class DBUpdater:
                     self.codes[code] = company
                     tmnow = datetime.now().strftime('%Y-%m-%d %H:%M')
                     print(f"[{tmnow}] {idx:04d} REPLACE INTO company_info VALUES ({code}, {company}, {today})")
+                self.session.commit()
+                print('')
 
     def read_naver(self, code, company, pages_to_fetch):
         """네이버 금융에서 주식 시세를 읽어서 데이터프레임으로 반환"""
         try:
-            url = f"http://finance.naver.com/item/sise_day.nhn?code={code}"
-            with urlopen(url) as doc:
+            url = f"https://finance.naver.com/item/sise_day.nhn?code={code}"
+            with requests.get(url, headers={'User-agent': 'Mozilla/5.0'}) as doc:
+                doc.encoding = 'euc-kr'
                 if doc is None:
                     return None
-                html = BeautifulSoup(doc, "lxml")
-                pgrr = html.find("td", class_="pgrr")
+                html = BeautifulSoup(doc.text, "lxml")
+                pgrr = html.find("td", class_="pgRR")
                 if pgrr is None:
                     return None
                 s = str(pgrr.a["href"]).split('=')
@@ -101,16 +102,33 @@ class DBUpdater:
             pages = min(int(lastpage), pages_to_fetch)
             for page in range(1, pages + 1):  # range 수정
                 pg_url = '{}&page={}'.format(url, page)
-                df = df.append(pd.read_html(pg_url, header=0)[0], ignore_index=True)  # ignore_index 추가
+                response = requests.get(pg_url, headers={'User-agent': 'Mozilla/5.0'})
+                response.encoding = 'euc-kr'
+                newDf = pd.read_html(StringIO(response.text), header=0)[0]
+                df = pd.concat([df, newDf])  # ignore_index 추가
                 tmnow = datetime.now().strftime("%Y-%m-%d %H:%M")
                 print('[{}] {} ({}) : {:04d}/{:04d} pages are downloading...'.format(tmnow, company, code, page,
                                                                                      pages), end="\r")
             df = df.rename(columns={'날짜': 'date', '종가': 'close', '전일비': 'diff', '시가': 'open', '고가': 'high',
                                     '저가': 'low', '거래량': 'volume'})
-            df['date'] = df['date'].str.replace('.', '-')  # replace 메소드 수정
+            df['date'] = df['date'].str.replace('.', '-')
             df = df.dropna()
-            df[['close', 'diff', 'open', 'high', 'low', 'volume']] = df[['close', 'diff', 'open', 'high', 'low',
-                                                                         'volume']].astype(int)
+
+            # 정리 작업 추가
+            df = df.replace({'상승': '', '하락': '', '보합': '', '상한가': '', '하한가': '', ',': ''}, regex=True)
+
+            # 개별 열에 대해 strip 적용
+            df['close'] = df['close'].map(lambda x: str(x).strip())
+            df['diff'] = df['diff'].map(lambda x: str(x).strip())
+            df['open'] = df['open'].map(lambda x: str(x).strip())
+            df['high'] = df['high'].map(lambda x: str(x).strip())
+            df['low'] = df['low'].map(lambda x: str(x).strip())
+            df['volume'] = df['volume'].map(lambda x: str(x).strip())
+
+            # 정수로 변환
+            df[['close', 'diff', 'open', 'high', 'low', 'volume']] = df[
+                ['close', 'diff', 'open', 'high', 'low', 'volume']].astype(float).astype(int)
+
             df = df[['date', 'open', 'high', 'low', 'close', 'diff', 'volume']]
         except Exception as e:
             print('Exception occurred :', str(e))
@@ -121,11 +139,11 @@ class DBUpdater:
         """네이버 금융에서 읽어온 주식 시세를 DB에 REPLACE"""
         with self.engine.connect() as conn:
             for r in df.itertuples():
-                sql = f"""
-                REPLACE INTO daily_price (code, date, open, high, low, close, diff, volume) 
-                VALUES ('{code}', '{r.date}', {r.open}, {r.high}, {r.low}, {r.close}, {r.diff}, {r.volume})
-                """
+                sql = "REPLACE INTO daily_price (code, date, open, high, low, close, diff, volume) VALUES ('{}', "\
+                      "'{}', {}, {}, {}, {}, {}, {})".format(code, r.date, r.open, r.high, r.low, r.close,
+                                                             r.diff, r.volume)
                 conn.execute(text(sql))
+            self.session.commit()
             print('[{}] #{:04d} {} ({}) : {} rows > REPLACE INTO daily_price [OK]'.format(datetime.now().
                                                                                           strftime('%Y-%m-%d %H:%M'),
                                                                                           num + 1, company, code,
@@ -134,6 +152,7 @@ class DBUpdater:
 
     def update_daily_price(self, pages_to_fetch):
         """KRX 상장법인의 주식 시세를 네이버로부터 읽어서 DB에 업로드"""
+        print(self.codes)
         for idx, code in enumerate(self.codes):
             df = self.read_naver(code, self.codes[code], pages_to_fetch)
             if df is None:
