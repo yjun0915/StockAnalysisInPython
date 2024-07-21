@@ -4,6 +4,8 @@ import pymysql
 import requests
 import pandas as pd
 from datetime import datetime
+from bs4 import BeautifulSoup
+from urllib.request import urlopen
 
 class DBUpdater:
     def __init__(self):
@@ -80,6 +82,36 @@ class DBUpdater:
 
     def read_naver(self, code, company, pages_to_fetch):
         """네이버 금융에서 주식 시세를 읽어서 데이터프레임으로 반환"""
+        try:
+            url = f"http://finance.naver.com/item/sise_day.nhn?code={code}"
+            with urlopen(url) as doc:
+                if doc is None:
+                    return None
+                html = BeautifulSoup(doc, "lxml")
+                pgrr = html.find("td", class_="pgrr")
+                if pgrr is None:
+                    return None
+                s = str(pgrr.a["href"]).split('=')
+                lastpage = s[-1]
+            df = pd.DataFrame()
+            pages = min(int(lastpage), pages_to_fetch)
+            for page in pages:
+                pg_url = '{}&page={}'.format(url, page)
+                df = df.append(pd.read_html(pg_url, header=0)[0])
+                tmnow = datetime.now().strftime("%Y-%m-%d %H:%M")
+                print('[{}] {} ({}) : {:04d}/{:04d} pages are downloading...',
+                      format(tmnow, company, code, page, pages), end="\r")
+            df = df.rename(columns={'날짜':'date','종가':'close','전일비':'diff'
+                    ,'시가':'open','고가':'high','저가':'low','거래량':'volume'})
+            df['date'] = df['date'].replace('.', '-')
+            df = df.dropna()
+            df[['close', 'diff', 'open', 'high', 'low', 'volume']] = df[['close','diff', 'open', 'high', 'low', 'volume']].astype(int)
+            df = df[['date', 'open', 'high', 'low', 'close', 'diff', 'volume']]
+        except Exception as e:
+            print('Expcetion occured :', str(e))
+            return None
+        return df
+
 
     def replace_into_db(self, df, num, code, company):
         """네이버 금융에서 읽어온 주식 시세를 DB에 REPLACE"""
