@@ -12,7 +12,7 @@ from sqlalchemy.orm import sessionmaker
 class DBUpdater:
     def __init__(self):
         """생성자: SQLAlchemy 연결 및 종목코드 딕셔너리 생성"""
-        self.engine = create_engine('mysql+pymysql://root:sk1127..@localhost:3306/Investar?charset=utf8')
+        self.engine = create_engine('mysql+pymysql://root:sk1127..@localhost:3306/Investar_past?charset=utf8')
         Session = sessionmaker(bind=self.engine)
         self.session = Session()
         with self.engine.begin() as conn:
