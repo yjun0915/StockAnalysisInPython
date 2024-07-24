@@ -4,19 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f5e1bf65-f450-4d9b-8c1a-5f86130ebd51" name="Changes" comment="troubleshoot use COMMIT quary automatically by replace self.engine.connect() to self.engine.begin() at with ~ as ~ sentance">
-      <change afterPath="$PROJECT_DIR$/Investar/Investar/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Investar/Investar/asgi.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Investar/Investar/settings.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Investar/Investar/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Investar/Investar/wsgi.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Investar/Model/config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Investar/manage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="f5e1bf65-f450-4d9b-8c1a-5f86130ebd51" name="Changes" comment="directory structure changing&#10;add django files init">
+      <change afterPath="$PROJECT_DIR$/Investar/Stocks/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Investar/Stocks/admin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Investar/Stocks/apps.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Investar/Stocks/migrations/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Investar/Stocks/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Investar/Stocks/tests.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Investar/Stocks/views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Investar/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Investar/DBUpdater.py" beforeDir="false" afterPath="$PROJECT_DIR$/Investar/Model/DBUpdater.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Investar/config.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Investar/Investar/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Investar/Investar/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Investar/Investar/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Investar/Investar/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Investar/Model/DBUpdater.py" beforeDir="false" afterPath="$PROJECT_DIR$/Investar/Stocks/DBUpdater.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Investar/Model/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/Investar/Stocks/config.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,6 +60,11 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.editor&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Investar/Stocks" />
+    </key>
+  </component>
   <component name="RunManager" selected="Python.DBUpdater">
     <configuration name="DBUpdater" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="StockAnalysisInPython" />
@@ -304,5 +310,16 @@
     <MESSAGE value="troubleshoot" />
     <MESSAGE value="troubleshoot use COMMIT quary automatically by replace self.engine.connect() to self.engine.begin() at with ~ as ~ sentance" />
     <option name="LAST_COMMIT_MESSAGE" value="troubleshoot use COMMIT quary automatically by replace self.engine.connect() to self.engine.begin() at with ~ as ~ sentance" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Investar/manage.py</url>
+          <line>2</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
