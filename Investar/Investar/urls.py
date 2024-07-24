@@ -16,9 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from Stocks import views
+from index import views as index_views
 from django.urls import path, re_path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path(r'^(?P<name>[A-Z][a-z]*)$', views.sayHello)
+    re_path(r'^(?P<name>[A-Z][a-z]*)$', views.sayHello),
+    path('', index_views.main_view),
 ]

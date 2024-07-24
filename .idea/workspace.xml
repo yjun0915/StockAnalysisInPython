@@ -4,20 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f5e1bf65-f450-4d9b-8c1a-5f86130ebd51" name="Changes" comment="directory structure changing&#10;add django files init">
-      <change afterPath="$PROJECT_DIR$/Investar/Stocks/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Investar/Stocks/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Investar/Stocks/apps.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Investar/Stocks/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Investar/Stocks/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Investar/Stocks/tests.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Investar/Stocks/views.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Investar/__init__.py" afterDir="false" />
+    <list default="true" id="f5e1bf65-f450-4d9b-8c1a-5f86130ebd51" name="Changes" comment="feature MTV model">
+      <change afterPath="$PROJECT_DIR$/Investar/.dockerignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Investar/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Investar/index/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Investar/index/admin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Investar/index/apps.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Investar/index/migrations/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Investar/index/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Investar/index/templates/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Investar/index/tests.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Investar/index/views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Investar/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Investar/Investar/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Investar/Investar/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Investar/Investar/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Investar/Investar/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Investar/Model/DBUpdater.py" beforeDir="false" afterPath="$PROJECT_DIR$/Investar/Stocks/DBUpdater.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Investar/Model/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/Investar/Stocks/config.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +29,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -51,6 +53,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
     &quot;Python.DBUpdater.executor&quot;: &quot;Run&quot;,
     &quot;Python.activate_this.executor&quot;: &quot;Run&quot;,
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
@@ -276,7 +279,15 @@
       <option name="project" value="LOCAL" />
       <updated>1721558339306</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="feature MTV model">
+      <option name="closed" value="true" />
+      <created>1721806586784</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1721806586784</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -309,7 +320,8 @@
     <MESSAGE value="feature change number of pages" />
     <MESSAGE value="troubleshoot" />
     <MESSAGE value="troubleshoot use COMMIT quary automatically by replace self.engine.connect() to self.engine.begin() at with ~ as ~ sentance" />
-    <option name="LAST_COMMIT_MESSAGE" value="troubleshoot use COMMIT quary automatically by replace self.engine.connect() to self.engine.begin() at with ~ as ~ sentance" />
+    <MESSAGE value="feature MTV model" />
+    <option name="LAST_COMMIT_MESSAGE" value="feature MTV model" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
